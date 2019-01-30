@@ -71,9 +71,9 @@ public:
 //Properties
 public:
     FloatProperty radius_;
-	FloatProperty swinging_frequency_;
+	IntProperty swinging_frequency_;
 	FloatProperty swinging_magnitude_;
-	FloatProperty rotation_cycle_;
+	FloatProperty animation_cycle_;
 	FloatProperty rotation_angle_;
 	FloatProperty swinging_cycle_position;
 

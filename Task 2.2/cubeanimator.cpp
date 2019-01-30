@@ -37,10 +37,10 @@ CubeAnimator::CubeAnimator()
     // Properties 
     // For a FloatProperty 
     // variablename(identifier, display name, init value, minvalue, maxvalue)
-    , radius_("radius", "Radius", 6, 1, 8)
-	, swinging_frequency_("swinging_frequency_", "Swinging Frequency", 0, 0, 10)
-	, swinging_magnitude_("swinging_magnitude_", "Swinging Magnitude", 0, 0, 5)
-	, rotation_cycle_("rotation_cycle_", "Animation Cycle", 0, 0, 1)
+    , radius_("radius", "Radius", 4, 1, 8)
+	, swinging_frequency_("swinging_frequency_", "Swinging Frequency", 8, 0, 10)
+	, swinging_magnitude_("swinging_magnitude_", "Swinging Magnitude", 1, 0, 5)
+	, animation_cycle_("animation_cycle_", "Animation Cycle", 0, 0, 1)
 	, rotation_angle_("rotation_angle_", "Rotation Angle", 0, 0, 6.283185307)
 	, swinging_cycle_position("swinging_cycle_position", "Swinging Cycle", 0, -1, 1)
 {
@@ -52,7 +52,7 @@ CubeAnimator::CubeAnimator()
     addProperty(radius_);
 	addProperty(swinging_frequency_);
 	addProperty(swinging_magnitude_);
-	addProperty(rotation_cycle_);
+	addProperty(animation_cycle_);
 	addProperty(rotation_angle_);
 	addProperty(swinging_cycle_position);
 
@@ -70,11 +70,11 @@ void CubeAnimator::process()
 
     // Transform the mesh (TODO)
 	// REMEMBER TO PUT THE MATRICES IN THE CORRECT ORDER (WASTED HOURS ON THAT...)
-	rotation_angle_ = rotation_cycle_ * 6.283185307; // current cycle position (between 0-1) * 2pi
+	rotation_angle_ = animation_cycle_ * 6.283185307; // current cycle position (between 0-1) * 2pi
 	swinging_cycle_position = swinging_magnitude_ * ::sin(rotation_angle_ * swinging_frequency_); //swinging_frequency = number of swings per circle
-	matrix *= glm::rotate(rotation_angle_.get(), vec3(0, 0, 1));
-	matrix *= glm::translate(vec3(swinging_cycle_position, 0, 0));
-	matrix *= glm::translate(vec3(radius_.get(), 0, 0));
+	matrix = glm::translate(vec3(radius_.get(), 0, 0)) * matrix;
+	matrix = glm::translate(vec3(swinging_cycle_position, 0, 0)) * matrix;
+	matrix = glm::rotate(rotation_angle_.get(), vec3(0, 0, 1)) * matrix;
 
     // Update
     mesh->setWorldMatrix(matrix);
